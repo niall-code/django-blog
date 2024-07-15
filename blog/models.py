@@ -16,6 +16,18 @@ class Post(models.Model):
     excerpt = models.TextField(blank=True)
     updated_on = models.DateTimeField(auto_now=True)
 
+    # Optional meta class
+    # 18+ , cheapest first , ...
+    class Meta:
+        # Displays posts in descending order of creation (old first) then author name
+        ordering = ["-created_on", "author"]
+
+    # Method
+    # Calculate age, prepend title, or count likes
+    def __str__(self):
+        # Makes the post identifier more human readable than `Post object(n)`
+        return f"{self.title} | written by {self.author}"
+
 
 class Comment(models.Model):
     post = models.ForeignKey(
@@ -27,3 +39,9 @@ class Comment(models.Model):
     body = models.TextField()
     approved = models.BooleanField(default=False)
     created_on = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["created_on"]
+
+    def __str__(self):
+        return f"Comment {self.body} by {self.author}"
